@@ -1,0 +1,74 @@
+  body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Hacker Terminals Scanlines Overlay */
+        .scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.06),
+                rgba(0, 255, 0, 0.02),
+                rgba(0, 0, 255, 0.06)
+            );
+            background-size: 100% 4px, 6px 100%;
+        }
+
+        /* Heart floating animation */
+        @keyframes float-heart {
+            0% {
+                transform: translateY(110vh) translateX(0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(100px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: float-heart 5s linear infinite;
+        }
+
+        /* Pulsing neon effect for hacker warning */
+        .neon-alert {
+            text-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444;
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Absolutely stacked fullscreen layouts to prevent side-by-side splitting */
+        .stage-pane {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            overflow: hidden;
+        }
+
+        .hidden-stage {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.97);
+            z-index: 0;
+        }
+
+        .active-stage {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }

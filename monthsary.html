@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hala! Compromised System...</title>
+    <!-- Tailwind CSS for rich modern layout design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for romantic/hacker icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Space Mono for Hacker phase, Inter & Playpen Sans for Love phase -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body class="bg-black text-white h-screen w-screen relative overflow-hidden select-none">
+
+    <!-- STAGE 1: THE HACK (Scary red-and-green Terminal) -->
+    <div id="stage-hack" class="stage-pane active-stage flex flex-col justify-between p-6 md:p-12 bg-zinc-950 scanlines">
+        <!-- Header status bar -->
+        <div class="flex justify-between items-center border-b border-red-900 pb-4 text-xs font-mono text-red-500">
+            <span class="flex items-center gap-2">
+                <span class="h-2.5 w-2.5 rounded-full bg-red-600 animate-ping"></span>
+                CRITICAL WARNING: COMPROMISED SYSTEM
+            </span>
+            <span id="system-clock">IP: 192.168.8.21</span>
+        </div>
+
+        <!-- Terminal screen console core content -->
+        <div class="flex-grow flex flex-col justify-center max-w-2xl mx-auto w-full font-mono mt-4">
+            <h1 class="text-3xl md:text-5xl font-bold text-red-600 mb-6 neon-alert tracking-wider text-center">
+                HALA NA-HACK KA! 🚨
+            </h1>
+            
+            <div class="bg-black/80 border border-red-900 rounded-lg p-5 h-64 overflow-y-auto text-green-500 text-sm md:text-base flex flex-col gap-2 shadow-inner shadow-red-950/40" id="terminal-console">
+                <!-- Javascript will type lines dynamically here -->
+            </div>
+
+            <!-- Danger meters -->
+            <div class="mt-6">
+                <div class="flex justify-between text-xs text-red-400 mb-2">
+                    <span>WIPING PRIVATE DATABASE...</span>
+                    <span id="percent-txt">0%</span>
+                </div>
+                <div class="w-full bg-zinc-900 rounded-full h-3 border border-red-950 overflow-hidden">
+                    <div id="progress-bar" class="bg-red-600 h-full w-0 transition-all duration-300 ease-out"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panic Button triggers fake progress cancelation -->
+        <div class="flex justify-center mt-6">
+            <button onclick="abortHack()" class="bg-red-600 hover:bg-red-700 text-white font-mono font-bold px-8 py-4 rounded-xl border-b-4 border-red-800 hover:border-b-2 hover:translate-y-[2px] transition-all duration-150 shadow-lg shadow-red-600/30 text-sm md:text-base tracking-widest uppercase">
+                🔴 STOP SYSTEM OVERRIDE
+            </button>
+        </div>
+    </div>
+
+    <!-- STAGE 2: THE REVEAL ("Charrot!") -->
+    <div id="stage-charrot" class="stage-pane hidden-stage flex flex-col items-center justify-center p-6 bg-gradient-to-tr from-pink-400 via-rose-300 to-amber-200 text-slate-800">
+        <div class="text-center max-w-md transform transition duration-500 hover:scale-105">
+            <span class="text-7xl md:text-9xl block mb-6 animate-bounce">🤪</span>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-rose-600 tracking-tight font-['Playpen_Sans'] mb-4 drop-shadow-sm">
+                Charrot!
+            </h1>
+            <p class="text-xl md:text-2xl font-medium text-slate-700 tracking-wide mb-8">
+                takot ka noh joke lang yun HAHHAHAHAHHA
+            </p>
+            <button onclick="goToQuestion()" class="bg-white hover:bg-pink-50 text-pink-600 font-extrabold px-8 py-4 rounded-full shadow-lg shadow-pink-200 hover:shadow-xl hover:scale-105 transition duration-300 border-2 border-pink-100 flex items-center gap-2 mx-auto">
+                Next Stage <i class="fa-solid fa-arrow-right animate-pulse"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- STAGE 3: THE LOVE QUESTION ("Love mo pa ako?") -->
+    <div id="stage-question" class="stage-pane hidden-stage flex flex-col items-center justify-center p-6 bg-gradient-to-tr from-pink-100 via-rose-50 to-red-100 text-slate-800">
+        
+        <!-- Floating hearts container behind -->
+        <div id="heart-background" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+
+        <div class="text-center max-w-xl mx-auto flex flex-col items-center justify-center z-10 p-6 md:p-10 rounded-3xl bg-white/60 backdrop-blur-md border border-white/60 shadow-xl w-full">
+            <span class="text-6xl md:text-7xl mb-4 animate-pulse">🥺👉👈</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold font-['Playpen_Sans'] text-rose-600 mb-2 leading-tight">
+                Tanong lang...
+            </h1>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 font-['Playpen_Sans'] mb-8">
+                Love mo pa ba ako?
+            </h2>
+
+            <!-- Playful interaction notes -->
+            <p id="fun-notifier" class="text-sm font-semibold text-rose-500 h-6 mb-4 transition-all duration-300 opacity-0 italic">
+                Aray ko naman! 🥺
+            </p>
+
+            <!-- Buttons container -->
+            <div id="buttons-container" class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full min-h-[140px] relative">
+                <!-- YES BUTTON -->
+                <button id="btn-yes" onclick="answerYes()" class="px-10 py-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-extrabold text-xl rounded-2xl shadow-xl shadow-teal-100 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer min-w-[140px] z-20">
+                    Oo naman! ❤️
+                </button>
+                
+                <!-- NO BUTTON (Will dynamically move/evade and vanish) -->
+                <button id="btn-no" class="px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold text-base rounded-2xl shadow-lg transition-all duration-300 absolute sm:static z-20 whitespace-nowrap">
+                    Hindi na... 💔
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 4: THE BIG ROMANTIC PAYOFF -->
+    <div id="stage-love" class="stage-pane hidden-stage flex flex-col items-center justify-between p-6 md:p-12 bg-gradient-to-tr from-pink-300 via-rose-200 to-rose-400 text-slate-800">
+        
+        <!-- Top decoration header -->
+        <div class="text-center pt-4">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white drop-shadow-md tracking-wider font-['Playpen_Sans']">
+               HAPPY MONTHSARY!!!
+            </h1>
+        </div>
+
+        <!-- Center Envelope & Letter -->
+        <div class="w-full max-w-md mx-auto flex flex-col items-center">
+            <!-- Love Letter Envelope Module -->
+            <div id="love-letter-container" class="w-full bg-white rounded-3xl shadow-2xl p-6 md:p-8 border-2 border-pink-100/40 relative transform transition duration-500 hover:scale-102 flex flex-col items-center text-center">
+                
+                <!-- Hearts & Ribbons badge -->
+                <div class="h-16 w-16 bg-rose-500 rounded-full flex items-center justify-center text-white text-2xl shadow-lg shadow-rose-400/40 -mt-14 mb-4 border-4 border-white animate-bounce">
+                    <i class="fa-solid fa-envelope-open-heart"></i>
+                </div>
+
+                <h3 class="text-2xl md:text-3xl font-extrabold font-['Playpen_Sans'] text-rose-600 mb-2">
+                    I Love You Too! 💖
+                </h3>
+                <p class="text-slate-500 text-xs tracking-wider uppercase mb-4">Monthsary Message</p>
+
+                <div class="w-full border-t border-dashed border-rose-200 pt-4 text-slate-700 text-sm md:text-base font-medium space-y-3 leading-relaxed max-h-56 overflow-y-auto pr-1">
+                    <p class="italic">"To my dearest favorite human,"</p>
+                    <p>thank you for always being here for me, for showing all the kindness in the world.</p>
+                    <p>Wala nang bawian ha? Sabi mo love mo pa rin ako! Lets make more happy memories together mahal ko</p>
+                </div>
+
+                <div class="mt-6 flex justify-center w-full">
+                    <button onclick="tripleConfetti()" class="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm rounded-full shadow-md shadow-pink-200 hover:shadow-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-sparkles text-amber-200"></i> confetti na malupet <i class="fa-solid fa-heart animate-ping"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer / Restart button -->
+        <div class="pb-4 text-center">
+            <span class="text-xs text-white/80 font-semibold tracking-wider block">Created with ❤️</span>
+            <button onclick="resetPrank()" class="text-[10px] text-white/50 hover:text-white mt-2 underline transition">Reset Prank</button>
+        </div>
+    </div>
+
+
+    <!-- AUDIO & TIMELINE INTERACTIVE LOGIC JAVASCRIPT -->
+    <script>
+        // Audio synthesis engine using Web Audio API to prevent heavy dependencies
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSynthSound(freq, duration, type = 'sine') {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                // Linear decay over duration
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio not allowed by gesture yet.");
+            }
+        }
+
+        // Custom melody sequences
+        function playHackerBeep() {
+            playSynthSound(120, 0.3, 'sawtooth');
+        }
+
+        function playAbortSirens() {
+            // Retro synth sweep
+            playSynthSound(440, 0.2, 'triangle');
+            setTimeout(() => playSynthSound(554, 0.2, 'triangle'), 100);
+            setTimeout(() => playSynthSound(659, 0.4, 'triangle'), 200);
+        }
+
+        function playCuteMelody() {
+            const notes = [261.63, 329.63, 392.00, 523.25, 659.25]; // C E G C E cute progression
+            notes.forEach((freq, idx) => {
+                setTimeout(() => {
+                    playSynthSound(freq, 0.4, 'sine');
+                }, idx * 120);
+            });
+        }
+
+        // Fake terminal log sequence simulation
+        const fakeLogs = [
+            { txt: "Initializing root kit...", delay: 300 },
+            { txt: "Accessing host memory systems...", delay: 600 },
+            { txt: "Target localized: Phone/PC of My Love.", delay: 900 },
+            { txt: "Establishing bypass protocols... SUCCESS.", delay: 1200 },
+            { txt: "Downloading photo catalog (10,482 files)...", delay: 1600 },
+            { txt: "System: Core database is highly confidential.", delay: 2000 },
+            { txt: "ANALYSIS: Found too much cuteness in user data.", delay: 2400 },
+            { txt: "WARNING: Emotional attachment lock is being enabled.", delay: 2800 },
+            { txt: "Extracting secrets...", delay: 3100 },
+            { txt: "Status: Hijacking device background files...", delay: 3500 },
+            { txt: "DECRYPTING CURRENT THOUGHTS... 'Inlove na inlove'", delay: 3900 },
+            { txt: "Threat lockdown countdown active. Wiping operating system...", delay: 4200 }
+        ];
+
+        let consoleDiv = document.getElementById("terminal-console");
+        let progressBar = document.getElementById("progress-bar");
+        let percentTxt = document.getElementById("percent-txt");
+        let currentProgress = 0;
+        let progressInterval;
+
+        // Auto terminal typist
+        window.onload = function() {
+            // Trigger automatic typewriter
+            let logIndex = 0;
+            
+            function printNextLog() {
+                if (logIndex < fakeLogs.length) {
+                    const log = fakeLogs[logIndex];
+                    setTimeout(() => {
+                        const line = document.createElement("div");
+                        line.className = "font-mono text-xs md:text-sm tracking-tight text-green-400";
+                        line.innerHTML = `<span class="text-red-500">[!]</span> ${log.txt}`;
+                        consoleDiv.appendChild(line);
+                        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                        
+                        // play cyber click beep
+                        playHackerBeep();
+
+                        logIndex++;
+                        printNextLog();
+                    }, log.delay - (logIndex > 0 ? fakeLogs[logIndex-1].delay : 0));
+                }
+            }
+            printNextLog();
+
+            // Progress bar counter
+            progressInterval = setInterval(() => {
+                if (currentProgress < 98) {
+                    currentProgress += Math.floor(Math.random() * 3) + 1;
+                    if (currentProgress > 98) currentProgress = 98;
+                    progressBar.style.width = currentProgress + "%";
+                    percentTxt.innerText = currentProgress + "%";
+                }
+            }, 180);
+        };
+
+        // Transition logic: Hack to Reveal
+        function abortHack() {
+            clearInterval(progressInterval);
+            playAbortSirens();
+            
+            // Fast flash screen effect
+            const hackScreen = document.getElementById("stage-hack");
+            hackScreen.classList.add("bg-red-950");
+            setTimeout(() => hackScreen.classList.remove("bg-red-950"), 100);
+            setTimeout(() => hackScreen.classList.add("bg-red-950"), 200);
+            
+            setTimeout(() => {
+                transitionStage("stage-hack", "stage-charrot");
+                // Launch nice little confetti immediately
+                confetti({
+                    particleCount: 80,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }, 500);
+        }
+
+        function goToQuestion() {
+            playCuteMelody();
+            transitionStage("stage-charrot", "stage-question");
+            setupEvasionPrank();
+        }
+
+        // Standard stage transition processor
+        function transitionStage(currentId, nextId) {
+            const curr = document.getElementById(currentId);
+            const next = document.getElementById(nextId);
+            
+            curr.classList.remove("active-stage");
+            curr.classList.add("hidden-stage");
+            
+            next.classList.remove("hidden-stage");
+            next.classList.add("active-stage");
+        }
+
+        // THE CUTE EVASIVE "NO" BUTTON INTERACTION
+        let dodgeCount = 0;
+        const funnyTexts = [
+            "Aray ko naman! 🥺",
+            "Sige pa, subukan mo ulit! 🤪",
+            "Error 404: Option disabled! ❌",
+            "Di pwede yan, lock in na! Locked character na ko! 🔒",
+            "Wala nang 'No' button, asikot na to! 😂",
+            "No option uninstalled due to heartbreak! 🛠️💔"
+        ];
+
+        function setupEvasionPrank() {
+            const btnNo = document.getElementById("btn-no");
+            const btnYes = document.getElementById("btn-yes");
+            const notifier = document.getElementById("fun-notifier");
+
+            function escape() {
+                dodgeCount++;
+                playSynthSound(300 + (dodgeCount * 50), 0.15, 'triangle');
+
+                // Custom notification text based on dodge counts
+                notifier.style.opacity = "1";
+                if (dodgeCount <= funnyTexts.length) {
+                    notifier.innerText = funnyTexts[dodgeCount - 1];
+                }
+
+                // If user hovered / tapped No too many times (e.g. 5 times), completely remove it
+                if (dodgeCount >= 6) {
+                    btnNo.style.display = 'none';
+                    notifier.innerText = "No button deleted permanently! Locked in to YES! 💖";
+                    // Grow Yes button to be huge & dramatic
+                    btnYes.classList.add("scale-125");
+                    return;
+                }
+
+                // Get dynamic bounding boxes to ensure the button stays inside the viewer viewport safely
+                const container = document.getElementById("stage-question");
+                const safeMargin = 40;
+                
+                // Calculate random locations keeping inside boundaries on smaller mobile viewports
+                const maxWidth = window.innerWidth - btnNo.offsetWidth - safeMargin;
+                const maxHeight = window.innerHeight - btnNo.offsetHeight - safeMargin;
+
+                const randomX = Math.max(safeMargin, Math.floor(Math.random() * maxWidth));
+                const randomY = Math.max(safeMargin, Math.floor(Math.random() * maxHeight));
+
+                // Switch style positioning to absolute viewport layout
+                btnNo.style.position = 'fixed';
+                btnNo.style.left = randomX + 'px';
+                btnNo.style.top = randomY + 'px';
+            }
+
+            // Both events to capture desktop and mobile touchscreen touch
+            btnNo.addEventListener("mouseenter", escape);
+            btnNo.addEventListener("touchstart", function(e) {
+                e.preventDefault(); // prevents standard click fires instantly
+                escape();
+            });
+        }
+
+        // SUCCESS HANDLER (Yes click)
+        function answerYes() {
+            // Trigger beautiful multi-layered synth song
+            playCuteMelody();
+            setTimeout(() => {
+                playSynthSound(523.25, 0.15, 'sine');
+                setTimeout(() => playSynthSound(659.25, 0.15, 'sine'), 100);
+                setTimeout(() => playSynthSound(783.99, 0.15, 'sine'), 200);
+                setTimeout(() => playSynthSound(1046.50, 0.5, 'sine'), 300);
+            }, 600);
+
+            // Confetti Explosion
+            tripleConfetti();
+
+            // Transition to love letter screen
+            transitionStage("stage-question", "stage-love");
+
+            // Initiate dynamic heart background generator
+            startFloatingHearts();
+        }
+
+        // Confetti helper
+        function tripleConfetti() {
+            confetti({
+                particleCount: 120,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0, y: 0.8 }
+                });
+            }, 250);
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1, y: 0.8 }
+                });
+            }, 400);
+        }
+
+        // Romantic floating bubble hearts background
+        let heartInterval;
+        function startFloatingHearts() {
+            const container = document.getElementById("heart-background");
+            
+            // Clear existing ones to prevent piling up memory leaks
+            container.innerHTML = "";
+            if (heartInterval) clearInterval(heartInterval);
+
+            heartInterval = setInterval(() => {
+                const heart = document.createElement("div");
+                heart.className = "floating-heart text-rose-500/30 text-2xl md:text-3xl";
+                heart.innerHTML = '<i class="fa-solid fa-heart"></i>';
+                
+                // Randomize positions, colors, speed and size
+                const randomX = Math.random() * window.innerWidth;
+                const duration = 4 + Math.random() * 4;
+                const scale = 0.4 + Math.random() * 1.2;
+                
+                heart.style.left = randomX + "px";
+                heart.style.animationDuration = duration + "s";
+                heart.style.transform = `scale(${scale})`;
+                
+                // Random heart emoji or icon colors occasionally
+                const colors = ['rgba(244,63,94,0.3)', 'rgba(236,72,153,0.35)', 'rgba(217,70,239,0.25)', 'rgba(251,113,133,0.4)'];
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+                container.appendChild(heart);
+                
+                // Clean up heart element after animation cycle ends
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+
+            }, 300);
+        }
+
+        // Reset prank to share with friends easily
+        function resetPrank() {
+            clearInterval(heartInterval);
+            document.getElementById("heart-background").innerHTML = "";
+            
+            // Restore buttons state
+            const btnNo = document.getElementById("btn-no");
+            const btnYes = document.getElementById("btn-yes");
+            btnNo.style.display = "block";
+            btnNo.style.position = "static";
+            btnNo.style.left = "auto";
+            btnNo.style.top = "auto";
+            btnYes.className = "px-10 py-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-extrabold text-xl rounded-2xl shadow-xl shadow-teal-100 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer min-w-[140px] z-20";
+            
+            dodgeCount = 0;
+            document.getElementById("fun-notifier").style.opacity = "0";
+
+            // Reboot progress simulation
+            consoleDiv.innerHTML = "";
+            currentProgress = 0;
+            
+            transitionStage("stage-love", "stage-hack");
+
+            // Restart typed console
+            let logIndex = 0;
+            function printNextLog() {
+                if (logIndex < fakeLogs.length) {
+                    const log = fakeLogs[logIndex];
+                    setTimeout(() => {
+                        const line = document.createElement("div");
+                        line.className = "font-mono text-xs md:text-sm text-green-400";
+                        line.innerHTML = `<span class="text-red-500">[!]</span> ${log.txt}`;
+                        consoleDiv.appendChild(line);
+                        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                        logIndex++;
+                        printNextLog();
+                    }, log.delay - (logIndex > 0 ? fakeLogs[logIndex-1].delay : 0));
+                }
+            }
+            printNextLog();
+
+            progressInterval = setInterval(() => {
+                if (currentProgress < 98) {
+                    currentProgress += Math.floor(Math.random() * 3) + 1;
+                    if (currentProgress > 98) currentProgress = 98;
+                    progressBar.style.width = currentProgress + "%";
+                    percentTxt.innerText = currentProgress + "%";
+                }
+            }, 180);
+        }
+    </script>
+</body>
+</html>
